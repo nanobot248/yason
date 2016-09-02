@@ -10,9 +10,8 @@ they are supported.
 *YASON is JSON with the following YAML-compatible changes:*
 
 * References: A referencable element can be defined by putting `&refname` in
-  front of it.
+  front of it and by using `*refname` to refer to it.
 * Classes/Types/Namespaces: Elements can be classified using YAML-compatible
   tags (!tag, !!tag).
 * By default no newlines at generation time, although newlines are supported
   by the parser.
-

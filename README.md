@@ -43,4 +43,25 @@ var str = '&root { lirum: "larum", "asdf": ["1", 2, "three", ' +
 console.log(YASON.parse(str));
 ```
 
-###
+## API
+
+### stringify(value, options)
+Converts the value (object, array, number, string, boolean, null) into a
+YASON string. The method supports the following options:
+
+* *classifier*: A function with the signature `classifier(value, container)`
+  that returns the class (tag) that should be used for the value. The tag
+  must not contain any whitespaces (including newlines). A "!" will be
+  prepended automatically. If `null` is returned, no tag will be used for
+  the value. `value` is the value that will be serialized next, container is
+  the object or array that contains the value (or null).
+
+### parse(string)
+
+### Generator
+
+### Parser
+
+### GeneratorTransform
+
+### ParserTransform

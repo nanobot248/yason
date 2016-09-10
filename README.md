@@ -35,4 +35,12 @@ obj["test"].push(obj["another_test"]);
 console.log(YASON.stringify(obj));
 ```
 
+To deserialize a single object, use the `parse` method:
+```javascript
+var YASON = require("yason");
+var str = '&root { lirum: "larum", "asdf": ["1", 2, "three", ' +
+  '&ref0 {four: "5"}], root: *root, "refer to ref0": *ref0}';
+console.log(YASON.parse(str));
+```
+
 ###

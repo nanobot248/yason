@@ -24,7 +24,7 @@ newline and any number of whitespaces.
 ## Basic Usage
 
 To serialize a single object, simply use the `stringify` method:
-```
+```javascript
 var YASON = require("yason");
 var obj = {
   test: [1, "b", {cde: "fgh"}],

@@ -43,7 +43,22 @@ var str = '&root { lirum: "larum", "asdf": ["1", 2, "three", ' +
 console.log(YASON.parse(str));
 ```
 
-## API
+## Usage / API
+
+Use `const YASON = require('yason');` to include the YASON module in your
+nodejs application. The YASON object will then contain the following items:
+
+* **Generator**: YASON generator (serializer) class.
+* **Parser**: YASON parser (deserializer) class.
+* **GeneratorTransform**: A nodejs transform stream that transforms JavaScript
+  values into YASON strings.
+* **ParserTransform**: A nodejs transform stream that transforms YASON strings
+  (or Buffers) into JavaScript values. Since streams don't support writing
+  `null` values, they can't be serialized using this transform.
+* **stringify**: Function that serializes a JavaScript value into a
+  YASON string.
+* **parse**: Function that deserializes a YASON string into a JavaScript
+  value.
 
 ### stringify(value, options)
 Converts the value (object, array, number, string, boolean, null) into a
@@ -57,6 +72,10 @@ YASON string. The method supports the following options:
   the object or array that contains the value (or null).
 
 ### parse(string)
+Parses a YASON string and converts it to the corresponding value. The result
+may contain values of type `YasonTaggedValue`. Tagged values are values of
+the YASON string that were tagged with a `!tag`, e.g. because the `classifier`
+of the `stringify` method returned a non-null value.
 
 ### Generator
 

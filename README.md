@@ -60,7 +60,7 @@ nodejs application. The YASON object will then contain the following items:
 * **parse**: Function that deserializes a YASON string into a JavaScript
   value.
 
-### stringify(value, options)
+### YASON.stringify(value, options)
 Converts the value (object, array, number, string, boolean, null) into a
 YASON string. The method supports the following options:
 
@@ -71,16 +71,82 @@ YASON string. The method supports the following options:
   the value. `value` is the value that will be serialized next, container is
   the object or array that contains the value (or null).
 
-### parse(string)
+### YASON.parse(string)
 Parses a YASON string and converts it to the corresponding value. The result
 may contain values of type `YasonTaggedValue`. Tagged values are values of
 the YASON string that were tagged with a `!tag`, e.g. because the `classifier`
 of the `stringify` method returned a non-null value.
 
 ### Generator
+The generator serializes JavaScript values into YASON strings.
+
+#### var generator = new YASON.Generator(options)
+Creates a new YASON generator object. Valid options are:
+
+* **classifier**: The classifier that should be used for the `stringify(...)`
+  method. If `stringify(...)` is called with a different classifier option,
+  that option will override the constructor option.
+* **stringReferences**: Options for string references. If the same string
+  appears more than once, further appearances may be replaced with a
+  `*referenceId` and the first appearance will be turned into a `&referenceId`
+  reference definition. This is only done if some conditions are met, for
+  now the only condition is the string length.
+** **stringReferences.minimumLength**: Strings are only turned into references
+  if the are at least `minimumLength` characters long.
+
+#### generator.stringify(value, options)
+See descriptions of `YASON.stringify(value, options)`
 
 ### Parser
 
+#### const Parser = YASON.Parser
+The parser is a class with a single class-method `Parser.parse(string)`.
+
+#### Parser.parse(string)
+Parses a string and converts it into a JavaScript value.
+
 ### GeneratorTransform
+A nodejs Transform that converts JavaScript values into YASON strings. It puts
+a newline after each serialized value.
+
+#### var trans = new YASON.GeneratorTransform(options)
+Create a new generator Transform object. The options parameter can contain
+the following settings:
+
+* **generator**: Options that will be passed through to the YASON.Generator
+  constructor. See the description of the Generator constructor for
+  more information.
+
+You can use the Transform like any other nodejs Transform, e.g. pipe it
+to stdout:
+
+```javascript
+var YasonGeneratorTransform = require("yason").GeneratorTransform;
+
+var out = new YasonGeneratorTransform();
+out.pipe(process.stdout);
+
+out.write({lirum: "larum"});
+out.write({bla: ["ble", "blu", "larum"], 1: [2, {3: 4}]});
+```
 
 ### ParserTransform
+A nodejs Transform that converts YASON strings (Buffers) into JavaScript values.
+Values are seperated by any number of whitespaces of which at least one is
+a newline.
+
+#### var trans = new YASON.ParserTransform(options)
+Creates a new parser Transform object. Currently no options are supported.
+The transform can be used like any other nodejs Transform:
+
+```javascript
+var YasonParserTransform = require("yason");
+
+var input = new YasonParserTransform();
+input.on("data", (data) => {
+  console.log("data: ", data);
+});
+
+process.stdin.pipe(input);
+input.resume();
+```
